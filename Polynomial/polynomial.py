@@ -7,28 +7,31 @@ class Polynomial:
         supported_types = [int, list, tuple, Polynomial]
 
         if type(arg) not in supported_types:
-            raise TypeError(f"Unsupported data type {type(arg).__name__}. Expected " + ", ".join([type_.__name__ for type_ in supported_types]))
+            raise TypeError(
+                f"Unsupported data type {type(arg).__name__}. Expected " +
+                ", ".join(
+                    [
+                        type_.__name__ for type_ in supported_types]))
 
         if type(arg) in [list, tuple]:
             if len(arg) == 0:
                 raise ValueError(f"An empty {type(arg).__name__} was given")
             for coef in arg:
-                if type(coef) != int:
-                    raise TypeError(f"Unsupported data type {type(coef).__name__}. Expected {int.__name__}")
+                if not isinstance(coef, int):
+                    raise TypeError(
+                        f"Unsupported data type {type(coef).__name__}. Expected {int.__name__}")
                 self.coeffs.append(coef)
-        elif type(arg) is Polynomial:
+        elif isinstance(arg, Polynomial):
             self.coeffs = arg.coeffs.copy()
         else:
             self.coeffs = [arg]
 
         self.max_degree = len(self.coeffs) - 1
 
-
     def __setattr__(self, key, value):
         self.__dict__[key] = value
         if key == "coeffs":
             self.max_degree = len(self.coeffs) - 1
-
 
     def __str__(self):
 
@@ -52,7 +55,6 @@ class Polynomial:
                 string += f"{'+' if coef > 0 else ''}{coef}{x_exp(self.max_degree - i)}"
         return string.lstrip("+")
 
-    
     def __addition__(self, arg, op):
         self_ = Polynomial(self)
         arg_ = Polynomial(arg)
@@ -78,37 +80,32 @@ class Polynomial:
         for i in range(self_.max_degree + 1):
             res.coeffs[i] = ops[op](self_.coeffs[i], arg_.coeffs[i])
         return res
-        
 
     def __repr__(self):
         return f"Polynomial({self.coeffs})"
 
-    
     def __add__(self, arg):
         return self.__addition__(arg, '+')
 
-
     def __radd__(self, arg):
-        if type(arg) is int:
+        if isinstance(arg, int):
             arg_ = Polynomial(arg)
         return arg_.__add__(self)
-
 
     def __sub__(self, arg):
         return self.__addition__(arg, '-')
 
-
     def __rsub__(self, arg):
-        if type(arg) is int:
+        if isinstance(arg, int):
             arg_ = Polynomial(arg)
         return arg_.__sub__(self)
-
 
     def __mul__(self, arg):
         self_ = Polynomial(self)
         arg_ = Polynomial(arg)
 
-        res = Polynomial([0 for i in range(self_.max_degree + arg_.max_degree + 1)])
+        res = Polynomial(
+            [0 for i in range(self_.max_degree + arg_.max_degree + 1)])
 
         for i, l_coeff in enumerate(self_.coeffs):
             for j, r_coeff in enumerate(arg_.coeffs):
@@ -116,13 +113,11 @@ class Polynomial:
 
         return res
 
-
     def __rmul__(self, arg):
-        if type(arg) is int:
+        if isinstance(arg, int):
             arg_ = Polynomial(arg)
         return arg_.__mul__(self)
 
-    
     def __eq__(self, arg):
         arg_ = Polynomial(arg)
         self_ = Polynomial(self)

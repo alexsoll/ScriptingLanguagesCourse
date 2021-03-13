@@ -6,4 +6,4 @@ setup(name='polynomial',
       author='Alexey S.',
       packages=['Polynomial'],
       zip_safe=False
-)
+      )

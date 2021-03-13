@@ -1,6 +1,7 @@
 import unittest
 from Polynomial.polynomial import Polynomial
 
+
 class TestPolynomialMethods(unittest.TestCase):
     def test_emtpy_args_constructor(self):
         self.assertRaises(TypeError, Polynomial)
