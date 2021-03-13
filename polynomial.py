@@ -95,14 +95,28 @@ class Polynomial:
             arg_ = Polynomial(arg)
         return arg_.__sub__(self)
 
+    
+    def __eq__(self, arg):
+        arg_ = Polynomial(arg)
+        self_ = Polynomial(self)
+
+        while self_.coefs[0] == 0:
+            del self_.coefs[0]
+        while arg_.coefs[0] == 0:
+            del arg_.coefs[0]
+
+        return True if self_.coefs == arg_.coefs else False
+
+
 
 if __name__ == "__main__":
 
     a = Polynomial([2, 1, -2, -4, 0])
+    d = Polynomial([2])
+    c = Polynomial([2, 1, -2, -4, 0])
     b = Polynomial([2, 3, 5, 1, 1])
+    b_ = Polynomial([0, 2, 3, 5, 1, 1])
+    #print(repr(b))
+    #c = 2 - b
 
-    #print(repr(a))
-    print(repr(b))
-    c = 2 - b
-
-    print(repr(c))
+    #print(repr(c))
