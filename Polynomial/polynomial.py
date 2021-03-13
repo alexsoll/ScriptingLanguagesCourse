@@ -3,23 +3,23 @@ class Polynomial:
     max_degree = None
 
     def __init__(self, arg):
+        self.coeffs = []
         supported_types = [int, list, tuple, Polynomial]
 
         if type(arg) not in supported_types:
             raise TypeError(f"Unsupported data type {type(arg).__name__}. Expected " + ", ".join([type_.__name__ for type_ in supported_types]))
-        
-        if type(arg) is Polynomial:
+
+        if type(arg) in [list, tuple]:
+            if len(arg) == 0:
+                raise ValueError(f"An empty {type(arg).__name__} was given")
+            for coef in arg:
+                if type(coef) != int:
+                    raise TypeError(f"Unsupported data type {type(coef).__name__}. Expected {int.__name__}")
+                self.coeffs.append(coef)
+        elif type(arg) is Polynomial:
             self.coeffs = arg.coeffs.copy()
         else:
-            if type(arg) in [list, tuple]:
-                if len(arg) == 0:
-                    raise ValueError(f"An empty {type(arg).__name__} was given")
-                for coef in arg:
-                    if type(coef) != int:
-                        raise TypeError(f"Unsupported data type {type(coef).__name__}. Expected {int.__name__}")
-                self.coeffs = arg
-            else:
-                self.coeffs = [arg]
+            self.coeffs = [arg]
 
         self.max_degree = len(self.coeffs) - 1
 
@@ -46,7 +46,7 @@ class Polynomial:
         for i, coef in enumerate(self.coeffs):
             if coef == 1 and i != self.max_degree:
                 string += f"{x_exp(self.max_degree - i)}"
-            if coef == -1 and i != self.max_degree:
+            elif coef == -1 and i != self.max_degree:
                 string += f"-{x_exp(self.max_degree - i)}"
             elif coef != 0:
                 string += f"{'+' if coef > 0 else ''}{coef}{x_exp(self.max_degree - i)}"
@@ -133,12 +133,3 @@ class Polynomial:
             del arg_.coeffs[0]
 
         return True if self_.coeffs == arg_.coeffs else False
-
-
-
-if __name__ == "__main__":
-
-    a = Polynomial([2, 1, -2, -4, 0])
-    print(a.max_degree)
-    a.coeffs = [0, 0, 0]
-    print(a.max_degree)
