@@ -1,5 +1,5 @@
 class Polynomial:
-    coefs = None
+    coeffs = None
     max_degree = None
 
     def __init__(self, arg):
@@ -9,7 +9,7 @@ class Polynomial:
             raise TypeError(f"Unsupported data type {type(arg).__name__}. Expected " + ", ".join([type_.__name__ for type_ in supported_types]))
         
         if type(arg) is Polynomial:
-            self.coefs = arg.coefs.copy()
+            self.coeffs = arg.coeffs.copy()
         else:
             if type(arg) in [list, tuple]:
                 if len(arg) == 0:
@@ -17,11 +17,11 @@ class Polynomial:
                 for coef in arg:
                     if type(coef) != int:
                         raise TypeError(f"Unsupported data type {type(coef).__name__}. Expected {int.__name__}")
-                self.coefs = arg
+                self.coeffs = arg
             else:
-                self.coefs = [arg]
+                self.coeffs = [arg]
 
-        self.max_degree = len(self.coefs) - 1
+        self.max_degree = len(self.coeffs) - 1
 
 
     def __str__(self):
@@ -37,9 +37,11 @@ class Polynomial:
                 r = f"x^{degree}"
             return r
 
-        for i, coef in enumerate(self.coefs):
+        for i, coef in enumerate(self.coeffs):
             if coef == 1 and i != self.max_degree:
-                string += f"{'+' if coef > 0 else ''}{x_exp(self.max_degree - i)}"
+                string += f"{x_exp(self.max_degree - i)}"
+            if coef == -1 and i != self.max_degree:
+                string += f"-{x_exp(self.max_degree - i)}"
             elif coef != 0:
                 string += f"{'+' if coef > 0 else ''}{coef}{x_exp(self.max_degree - i)}"
         return string.lstrip("+")
@@ -51,13 +53,13 @@ class Polynomial:
 
         if self_.max_degree > arg_.max_degree:
             tmp = [0 for i in range(self_.max_degree - arg_.max_degree)]
-            tmp.extend(arg_.coefs)
-            arg_.coefs = tmp
+            tmp.extend(arg_.coeffs)
+            arg_.coeffs = tmp
             arg_.max_degree = self_.max_degree
         elif self_.max_degree < arg_.max_degree:
             tmp = [0 for i in range(arg_.max_degree - self_.max_degree)]
-            tmp.extend(self_.coefs)
-            self_.coefs = tmp
+            tmp.extend(self_.coeffs)
+            self_.coeffs = tmp
             self_.max_degree = arg_.max_degree
 
         res = Polynomial([0 for i in range(self_.max_degree + 1)])
@@ -68,12 +70,12 @@ class Polynomial:
         }
 
         for i in range(self_.max_degree + 1):
-            res.coefs[i] = ops[op](self_.coefs[i], arg_.coefs[i])
+            res.coeffs[i] = ops[op](self_.coeffs[i], arg_.coeffs[i])
         return res
         
 
     def __repr__(self):
-        return f"Polynomial({self.coefs})"
+        return f"Polynomial({self.coeffs})"
 
     
     def __add__(self, arg):
@@ -95,17 +97,36 @@ class Polynomial:
             arg_ = Polynomial(arg)
         return arg_.__sub__(self)
 
+
+    def __mul__(self, arg):
+        self_ = Polynomial(self)
+        arg_ = Polynomial(arg)
+
+        res = Polynomial([0 for i in range(self_.max_degree + arg_.max_degree + 1)])
+
+        for i, l_coeff in enumerate(self_.coeffs):
+            for j, r_coeff in enumerate(arg_.coeffs):
+                res.coeffs[i + j] += l_coeff * r_coeff
+
+        return res
+
+
+    def __rmul__(self, arg):
+        if type(arg) is int:
+            arg_ = Polynomial(arg)
+        return arg_.__mul__(self)
+
     
     def __eq__(self, arg):
         arg_ = Polynomial(arg)
         self_ = Polynomial(self)
 
-        while self_.coefs[0] == 0:
-            del self_.coefs[0]
-        while arg_.coefs[0] == 0:
-            del arg_.coefs[0]
+        while self_.coeffs[0] == 0:
+            del self_.coeffs[0]
+        while arg_.coeffs[0] == 0:
+            del arg_.coeffs[0]
 
-        return True if self_.coefs == arg_.coefs else False
+        return True if self_.coeffs == arg_.coeffs else False
 
 
 
@@ -116,6 +137,23 @@ if __name__ == "__main__":
     c = Polynomial([2, 1, -2, -4, 0])
     b = Polynomial([2, 3, 5, 1, 1])
     b_ = Polynomial([0, 2, 3, 5, 1, 1])
+
+    a == b
+
+    a + b
+
+    a - b
+
+    a + 2
+
+    a = Polynomial([1, 0, 1, 0, -3])
+    b = Polynomial([3, 0, 5, 0, -4, -1])
+    print(a)
+    #print(b)
+    #print(a * b)
+    #print(b * a)
+    print(a * 2)
+    print(2 * a)
     #print(repr(b))
     #c = 2 - b
 
