@@ -24,6 +24,12 @@ class Polynomial:
         self.max_degree = len(self.coeffs) - 1
 
 
+    def __setattr__(self, key, value):
+        self.__dict__[key] = value
+        if key == "coeffs":
+            self.max_degree = len(self.coeffs) - 1
+
+
     def __str__(self):
 
         string = ""
@@ -133,28 +139,6 @@ class Polynomial:
 if __name__ == "__main__":
 
     a = Polynomial([2, 1, -2, -4, 0])
-    d = Polynomial([2])
-    c = Polynomial([2, 1, -2, -4, 0])
-    b = Polynomial([2, 3, 5, 1, 1])
-    b_ = Polynomial([0, 2, 3, 5, 1, 1])
-
-    a == b
-
-    a + b
-
-    a - b
-
-    a + 2
-
-    a = Polynomial([1, 0, 1, 0, -3])
-    b = Polynomial([3, 0, 5, 0, -4, -1])
-    print(a)
-    #print(b)
-    #print(a * b)
-    #print(b * a)
-    print(a * 2)
-    print(2 * a)
-    #print(repr(b))
-    #c = 2 - b
-
-    #print(repr(c))
+    print(a.max_degree)
+    a.coeffs = [0, 0, 0]
+    print(a.max_degree)
