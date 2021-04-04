@@ -27,6 +27,11 @@ class Polynomial:
             self.coeffs = [arg]
 
         self.max_degree = len(self.coeffs) - 1
+        self.simplify()
+
+    def simplify(self):
+        while self.coeffs[0] == 0 and self.max_degree != 0:
+            del self.coeffs[0]
 
     def __getattribute__(self, attrname):
         if attrname == "max_degree":
@@ -56,8 +61,10 @@ class Polynomial:
             return r
 
         for i, coef in enumerate(self.coeffs):
+            if self.max_degree == 0 and coef == 0:
+                return "0"
             if coef == 1 and i != self.max_degree:
-                string += f"{x_exp(self.max_degree - i)}"
+                string += f"+{x_exp(self.max_degree - i)}"
             elif coef == -1 and i != self.max_degree:
                 string += f"-{x_exp(self.max_degree - i)}"
             elif coef != 0:
@@ -79,7 +86,8 @@ class Polynomial:
             self_.coeffs = tmp
             self_.max_degree = arg_.max_degree
 
-        res = Polynomial([0 for i in range(self_.max_degree + 1)])
+        res = Polynomial(0)
+        res.coeffs = [0 for i in range(self_.max_degree + 1)]
 
         ops = {
             '+': lambda a, b: a + b,
@@ -88,6 +96,8 @@ class Polynomial:
 
         for i in range(self_.max_degree + 1):
             res.coeffs[i] = ops[op](self_.coeffs[i], arg_.coeffs[i])
+        
+        res.simplify()
         return res
 
     def __repr__(self):
@@ -128,13 +138,14 @@ class Polynomial:
         self_ = Polynomial(self)
         arg_ = Polynomial(arg)
 
-        res = Polynomial(
-            [0 for i in range(self_.max_degree + arg_.max_degree + 1)])
+        res = Polynomial(0)
+        res.coeffs = [0 for i in range(self_.max_degree + arg_.max_degree + 1)]
 
         for i, l_coeff in enumerate(self_.coeffs):
             for j, r_coeff in enumerate(arg_.coeffs):
                 res.coeffs[i + j] += l_coeff * r_coeff
-
+        
+        res.simplify()
         return res
 
     def __rmul__(self, arg):
@@ -151,9 +162,7 @@ class Polynomial:
         arg_ = Polynomial(arg)
         self_ = Polynomial(self)
 
-        while self_.coeffs[0] == 0:
-            del self_.coeffs[0]
-        while arg_.coeffs[0] == 0:
-            del arg_.coeffs[0]
+        self_.simplify()
+        arg_.simplify()
 
         return True if self_.coeffs == arg_.coeffs else False
