@@ -45,7 +45,8 @@ class Polynomial:
         elif attrname == "coeffs":
             return self.coeffs
         else:
-            raise AttributeError(f"'{type(self).__name__}' object has no attribute '{attrname}'")
+            raise AttributeError(
+                f"'{type(self).__name__}' object has no attribute '{attrname}'")
 
     def __str__(self):
 
@@ -96,7 +97,7 @@ class Polynomial:
 
         for i in range(self_.max_degree + 1):
             res.coeffs[i] = ops[op](self_.coeffs[i], arg_.coeffs[i])
-        
+
         res.simplify()
         return res
 
@@ -144,7 +145,7 @@ class Polynomial:
         for i, l_coeff in enumerate(self_.coeffs):
             for j, r_coeff in enumerate(arg_.coeffs):
                 res.coeffs[i + j] += l_coeff * r_coeff
-        
+
         res.simplify()
         return res
 

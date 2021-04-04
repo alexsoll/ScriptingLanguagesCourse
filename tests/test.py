@@ -33,14 +33,19 @@ class TestPolynomialMethods(unittest.TestCase):
             "x^2-x+1", "-x^2+2x", "5", "x^2+1", "x^3+x+1", "x^3-x+1", "1"
         ]
         for i, param in enumerate(params):
-            self.assertEqual(Polynomial(param).__str__(), results[i], f"Incorrect comparison for {Polynomial(param).__repr__()}")
+            self.assertEqual(
+                Polynomial(param).__str__(),
+                results[i],
+                f"Incorrect comparison for {Polynomial(param).__repr__()}")
 
     def test_repr(self):
         # Test 1
-        self.assertEqual(Polynomial([1, 2, 3]).__repr__(), "Polynomial([1, 2, 3])")
+        self.assertEqual(Polynomial(
+            [1, 2, 3]).__repr__(), "Polynomial([1, 2, 3])")
 
-        # Test 2 
-        self.assertEqual(Polynomial((1, 2, 3)).__repr__(), "Polynomial([1, 2, 3])")
+        # Test 2
+        self.assertEqual(Polynomial((1, 2, 3)).__repr__(),
+                         "Polynomial([1, 2, 3])")
 
         # Test 3
         self.assertEqual(Polynomial(1).__repr__(), "Polynomial([1])")
@@ -199,7 +204,7 @@ class TestPolynomialMethods(unittest.TestCase):
         # Initialization
         p = Polynomial([1, 1, 3])
         fs = [2.0, "2.0", [2.0], (2.0)]
-        
+
         for f in fs:
             with self.assertRaises(TypeError):
                 p + f
@@ -211,7 +216,7 @@ class TestPolynomialMethods(unittest.TestCase):
         # Initialization
         p = Polynomial([1, 1, 3])
         fs = [2.0, "2.0", [2.0], (2.0)]
-        
+
         for f in fs:
             with self.assertRaises(TypeError):
                 p - f
@@ -223,7 +228,7 @@ class TestPolynomialMethods(unittest.TestCase):
         # Initialization
         p = Polynomial([1, 1, 3])
         fs = [2.0, "2.0", [2.0], (2.0)]
-        
+
         for f in fs:
             with self.assertRaises(TypeError):
                 p * f
