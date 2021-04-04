@@ -85,22 +85,37 @@ class Polynomial:
         return f"Polynomial({self.coeffs})"
 
     def __add__(self, arg):
+        if type(arg) not in [Polynomial, int]:
+            raise TypeError(
+                f"unsupported operand type(s) for +: '{type(self).__name__}' and '{type(arg).__name__}'")
         return self.__addition__(arg, '+')
 
     def __radd__(self, arg):
+        if type(arg) not in [Polynomial, int]:
+            raise TypeError(
+                f"unsupported operand type(s) for +: '{type(self).__name__}' and '{type(arg).__name__}'")
         if isinstance(arg, int):
             arg_ = Polynomial(arg)
         return arg_.__add__(self)
 
     def __sub__(self, arg):
+        if type(arg) not in [Polynomial, int]:
+            raise TypeError(
+                f"unsupported operand type(s) for -: '{type(self).__name__}' and '{type(arg).__name__}'")
         return self.__addition__(arg, '-')
 
     def __rsub__(self, arg):
+        if type(arg) not in [Polynomial, int]:
+            raise TypeError(
+                f"unsupported operand type(s) for -: '{type(self).__name__}' and '{type(arg).__name__}'")
         if isinstance(arg, int):
             arg_ = Polynomial(arg)
         return arg_.__sub__(self)
 
     def __mul__(self, arg):
+        if type(arg) not in [Polynomial, int]:
+            raise TypeError(
+                f"unsupported operand type(s) for *: '{type(self).__name__}' and '{type(arg).__name__}'")
         self_ = Polynomial(self)
         arg_ = Polynomial(arg)
 
@@ -114,11 +129,16 @@ class Polynomial:
         return res
 
     def __rmul__(self, arg):
+        if type(arg) not in [Polynomial, int]:
+            raise TypeError(
+                f"unsupported operand type(s) for *: '{type(self).__name__}' and '{type(arg).__name__}'")
         if isinstance(arg, int):
             arg_ = Polynomial(arg)
         return arg_.__mul__(self)
 
     def __eq__(self, arg):
+        if type(arg) not in [Polynomial, int]:
+            return False
         arg_ = Polynomial(arg)
         self_ = Polynomial(self)
 
