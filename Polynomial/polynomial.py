@@ -28,10 +28,19 @@ class Polynomial:
 
         self.max_degree = len(self.coeffs) - 1
 
-    def __setattr__(self, key, value):
-        self.__dict__[key] = value
-        if key == "coeffs":
-            self.max_degree = len(self.coeffs) - 1
+    def __getattribute__(self, attrname):
+        if attrname == "max_degree":
+            return len(self.coeffs) - 1
+        else:
+            return object.__getattribute__(self, attrname)
+
+    def __getattr__(self, attrname):
+        if attrname == "max_degree":
+            return self.max_degree
+        elif attrname == "coeffs":
+            return self.coeffs
+        else:
+            raise AttributeError(f"'{type(self).__name__}' object has no attribute '{attrname}'")
 
     def __str__(self):
 
